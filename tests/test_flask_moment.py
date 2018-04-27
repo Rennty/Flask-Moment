@@ -83,6 +83,13 @@ class TestFlaskMomentIncludes(object):
         assert "<script" in ts
         assert "2.18.1/moment-with-locales.min.js" in str(ts)
 
+    def test_include_moment_renders_properly_with_ssl(self, app, moment):
+        app.config['MOMENT_CDN_FORCE_SSL'] = True
+        ts = str(render_template_string("{{ moment.include_moment() }}"))
+        assert "<script" in ts
+        assert "2.18.1/moment-with-locales.min.js" in str(ts)
+        assert "https" in ts
+
     def test_include_jquery_default(self):
         include_jquery = _moment.include_jquery()
 

@@ -16,6 +16,9 @@ class _moment(object):
                 else 'moment-with-langs.min.js'
             js = '<script src="//cdnjs.cloudflare.com/ajax/libs/' \
                  'moment.js/%s/%s"></script>\n' % (version, js_filename)
+            if current_app.config['MOMENT_CDN_FORCE_SSL']:
+                js = '<script src="https://cdnjs.cloudflare.com/ajax/libs/' \
+                 'moment.js/%s/%s"></script>\n' % (version, js_filename)
         return Markup('''%s<script>
 moment.locale("en");
 function flask_moment_render(elem) {
@@ -110,6 +113,7 @@ class Moment(object):
             app.extensions = {}
         app.extensions['moment'] = _moment
         app.context_processor(self.context_processor)
+        app.config.setdefault('MOMENT_CDN_FORCE_SSL', False)
 
     @staticmethod
     def context_processor():
